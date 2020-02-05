@@ -13,6 +13,6 @@ module.exports = {
         filename: 'hive.js',
         path: path.resolve(__dirname, 'dist'),
         library: '',
-        libraryTarget: 'commonjs',
+        libraryTarget: 'umd',
     }
 }
