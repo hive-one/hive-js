@@ -4,8 +4,10 @@
   "description": "Package for use of the hive.one API",
   "main": "dist/hive.js",
   "scripts": {
-    "build": "webpack",
-    "lint": "eslint"
+    "dev": "NODE_ENV=development webpack",
+    "build": "NODE_ENV=production webpack",
+    "lint": "eslint",
+    "test": "jest"
   },
   "author": "Danny Aziz",
   "license": "MIT",
@@ -18,11 +20,14 @@
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jest": "^23.6.0",
+    "jest": "^25.1.0",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
     "@babel/runtime": "^7.8.4",
-    "axios": "^0.19.2"
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0"
   }
 }
