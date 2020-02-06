@@ -7,6 +7,7 @@ class HiveAPI {
     }
 
     async availableInfluncers({ format = 'screenName' } = {}) {
+        if (!['screenName', 'id'].includes(format)) throw new Error('format not one of: screenName, id');
         try {
             const response = await axios.get(
                 'https://hive.one/api/v1/influencers/',
@@ -23,6 +24,8 @@ class HiveAPI {
     }
 
     async topInfluencers({ cluster = 'Crypto', after = 0 } = {}) {
+        if (!['Crypto', 'BTC', 'ETH', 'XRP'].includes(cluster)) throw new Error('cluster not one of: Crypto, BTC, ETH, XRP');
+        if (typeof (after) !== 'number') throw new Error('After should be type int');
         try {
             const response = await axios.get(
                 'https://hive.one/api/v1/influencers/top/',
@@ -46,6 +49,7 @@ class HiveAPI {
         influencerId, format = 'screenName', rankType: rank_type = 'all', includeFollowers: include_followers = 0,
     } = {}) {
         if (!influencerId) throw new Error('influencerId not provided');
+        if (!['screenName', 'id'].includes(format)) throw new Error('format not one of: screenName, id');
         if (!['all', 'personal'].includes(rank_type)) throw new Error('rankType not one of: all, personal');
         if (![0, 1].includes(include_followers)) throw new Error('includeFollowers not one of: 0, 1');
         try {
@@ -68,6 +72,9 @@ class HiveAPI {
     }
 
     async influencerHistory({ influencerId, format = 'screenName', rankType: rank_type = 'all' } = {}) {
+        if (!influencerId) throw new Error('influencerId not provided');
+        if (!['screenName', 'id'].includes(format)) throw new Error('format not one of: screenName, id');
+        if (!['all', 'personal'].includes(rank_type)) throw new Error('rankType not one of: all, personal');
         try {
             const response = await axios.get(
                 `https://hive.one/api/v1/influencers/${(format === 'screenName' ? 'screen_name' : 'id')}/${influencerId}/history/`,
@@ -90,8 +97,9 @@ class HiveAPI {
         influencerId, format = 'screenName', appearanceType: appearance_type = 'all', after = 0,
     } = {}) {
         if (!influencerId) throw new Error('influencerId not provided');
+        if (!['screenName', 'id'].includes(format)) throw new Error('format not one of: screenName, id');
         if (!['all', 'guest', 'host'].includes(appearance_type)) throw new Error('rankType not one of: all, personal');
-        if (typeof (after) !== 'number') throw new Error('After should be type int');
+        if (typeof (after) !== 'number') throw new Error('after should be type int');
         try {
             const response = await axios.get(
                 `https://hive.one/api/v1/influencers/${(format === 'screenName' ? 'screen_name' : 'id')}/${influencerId}/podcasts/`,
