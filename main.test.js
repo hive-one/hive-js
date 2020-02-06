@@ -21,7 +21,7 @@ describe('Integration Tests With Live API', () => {
         });
 
         test('screenName format', async () => {
-            const response = await hiveAPI.availableInfluncers({ format: 'screeName' });
+            const response = await hiveAPI.availableInfluncers({ format: 'screenName' });
             expect(typeof (response)).toBe('object');
             expect(typeof (response[0])).toBe('string');
         });
@@ -34,10 +34,53 @@ describe('Integration Tests With Live API', () => {
         });
 
         test('Nonsense Format', async () => {
-            const response = await hiveAPI.availableInfluncers({ format: 'nonsense' });
+            await expect(hiveAPI.availableInfluncers({ format: 'nonsense' }))
+                .rejects
+                .toThrow(Error);
+        });
+    });
+
+    describe('Top Influencers', () => {
+        test('Default params', async () => {
+            const response = await hiveAPI.topInfluencers();
             expect(typeof (response)).toBe('object');
-            expect(typeof (response[0])).toBe('string');
-            expect(typeof (parseInt(response[0], 10))).toBe('number');
+            expect(typeof (response[0])).toBe('object');
+        });
+
+        test('Crypto', async () => {
+            const response = await hiveAPI.topInfluencers({ cluster: 'Crypto' });
+            expect(typeof (response)).toBe('object');
+            expect(typeof (response[0])).toBe('object');
+        });
+
+        test('BTC', async () => {
+            const response = await hiveAPI.topInfluencers({ cluster: 'BTC' });
+            expect(typeof (response)).toBe('object');
+            expect(typeof (response[0])).toBe('object');
+        });
+
+        test('ETH', async () => {
+            const response = await hiveAPI.topInfluencers({ cluster: 'ETH' });
+            expect(typeof (response)).toBe('object');
+            expect(typeof (response[0])).toBe('object');
+        });
+
+        test('XRP', async () => {
+            const response = await hiveAPI.topInfluencers({ cluster: 'XRP' });
+            expect(typeof (response)).toBe('object');
+            expect(typeof (response[0])).toBe('object');
+        });
+
+        test('Paginate', async () => {
+            const response = await hiveAPI.topInfluencers({ after: 100 });
+            expect(typeof (response)).toBe('object');
+            expect(typeof (response[0])).toBe('object');
+        });
+
+        test('Incorrect Cluster', async () => {
+            await expect(hiveAPI.topInfluencers({ cluster: 'ECoin' }))
+                .rejects
+                .toThrow(Error);
         });
     });
 
@@ -88,7 +131,6 @@ describe('Integration Tests With Live API', () => {
         // TODO: Screen Name
         // TODO: ID
     });
-
 
     describe('Influencer Podcasts', () => {
         test('Nothing Passed', async () => {
