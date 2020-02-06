@@ -45,6 +45,9 @@ class HiveAPI {
     async influencerDetails({
         influencerId, format = 'screenName', rankType: rank_type = 'all', includeFollowers: include_followers = 0,
     } = {}) {
+        if (!influencerId) throw new Error('influencerId not provided');
+        if (!['all', 'personal'].includes(rank_type)) throw new Error('rankType not one of: all, personal');
+        if (![0, 1].includes(include_followers)) throw new Error('includeFollowers not one of: 0, 1');
         try {
             const response = await axios.get(
                 `https://hive.one/api/v1/influencers/${(format === 'screenName' ? 'screen_name' : 'id')}/${influencerId}/`,
@@ -86,6 +89,9 @@ class HiveAPI {
     async influencerPodcasts({
         influencerId, format = 'screenName', appearanceType: appearance_type = 'all', after = 0,
     } = {}) {
+        if (!influencerId) throw new Error('influencerId not provided');
+        if (!['all', 'guest', 'host'].includes(appearance_type)) throw new Error('rankType not one of: all, personal');
+        if (typeof (after) !== 'number') throw new Error('After should be type int');
         try {
             const response = await axios.get(
                 `https://hive.one/api/v1/influencers/${(format === 'screenName' ? 'screen_name' : 'id')}/${influencerId}/podcasts/`,
@@ -105,13 +111,16 @@ class HiveAPI {
         }
     }
 
-    async influencerBatch({ influencerIDS: twitter_ids = [], rankType: rank_type = 'all', includeFollowers: include_followers = 0 } = {}) {
+    async influencerBatch({ influencerIDS: twitterIDS = [], rankType: rank_type = 'all', includeFollowers: include_followers = 0 } = {}) {
+        if (!twitterIDS.length) throw new Error('influencerIDS not provided');
+        if (!['all', 'personal'].includes(rank_type)) throw new Error('rankType not one of: all, personal');
+        if (![0, 1].includes(include_followers)) throw new Error('includeFollowers not one of: 0, 1');
         try {
             const response = await axios.get(
                 'https://hive.one/api/v1/influencers/batch/',
                 {
                     params: {
-                        twitter_ids: JSON.stringify(twitter_ids),
+                        twitter_ids: JSON.stringify(twitterIDS),
                         rank_type,
                         include_followers,
                     },
