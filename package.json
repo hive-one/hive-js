@@ -1,6 +1,6 @@
 {
   "name": "hiveone-js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Package for use of the hive.one API",
   "main": "dist/hive.js",
   "scripts": {
