@@ -1,16 +1,18 @@
 const axios = require('axios');
 
 class HiveAPI {
-    constructor(apiKey) {
+    constructor({ apiKey, defaultFormat = 'screenName', host = 'https://hive.one/' } = {}) {
         this.apiKey = apiKey;
+        this.defaultFormat = defaultFormat;
+        this.host = host;
         if (!this.apiKey) throw new Error('You must provide an API Key');
     }
 
-    async availableInfluncers({ format = 'screenName' } = {}) {
+    async availableInfluncers({ format = this.defaultFormat } = {}) {
         if (!['screenName', 'id'].includes(format)) throw new Error('format not one of: screenName, id');
         try {
             const response = await axios.get(
-                'https://hive.one/api/v1/influencers/',
+                `${this.host}api/v1/influencers/`,
                 {
                     headers: {
                         Authorization: `Token ${this.apiKey}`,
@@ -28,7 +30,7 @@ class HiveAPI {
         if (typeof (after) !== 'number') throw new Error('After should be type int');
         try {
             const response = await axios.get(
-                'https://hive.one/api/v1/influencers/top/',
+                `${this.host}api/v1/influencers/top/`,
                 {
                     params: {
                         cluster,
@@ -46,7 +48,7 @@ class HiveAPI {
     }
 
     async influencerDetails({
-        influencerId, format = 'screenName', rankType: rank_type = 'all', includeFollowers: include_followers = 0,
+        influencerId, format = this.defaultFormat, rankType: rank_type = 'all', includeFollowers: include_followers = 0,
     } = {}) {
         if (!influencerId) throw new Error('influencerId not provided');
         if (!['screenName', 'id'].includes(format)) throw new Error('format not one of: screenName, id');
@@ -54,7 +56,7 @@ class HiveAPI {
         if (![0, 1].includes(include_followers)) throw new Error('includeFollowers not one of: 0, 1');
         try {
             const response = await axios.get(
-                `https://hive.one/api/v1/influencers/${(format === 'screenName' ? 'screen_name' : 'id')}/${influencerId}/`,
+                `${this.host}api/v1/influencers/${(format === 'screenName' ? 'screen_name' : 'id')}/${influencerId}/`,
                 {
                     params: {
                         rank_type,
@@ -71,13 +73,13 @@ class HiveAPI {
         }
     }
 
-    async influencerHistory({ influencerId, format = 'screenName', rankType: rank_type = 'all' } = {}) {
+    async influencerHistory({ influencerId, format = this.defaultFormat, rankType: rank_type = 'all' } = {}) {
         if (!influencerId) throw new Error('influencerId not provided');
         if (!['screenName', 'id'].includes(format)) throw new Error('format not one of: screenName, id');
         if (!['all', 'personal'].includes(rank_type)) throw new Error('rankType not one of: all, personal');
         try {
             const response = await axios.get(
-                `https://hive.one/api/v1/influencers/${(format === 'screenName' ? 'screen_name' : 'id')}/${influencerId}/history/`,
+                `${this.host}api/v1/influencers/${(format === 'screenName' ? 'screen_name' : 'id')}/${influencerId}/history/`,
                 {
                     params: {
                         rank_type,
@@ -94,7 +96,7 @@ class HiveAPI {
     }
 
     async influencerPodcasts({
-        influencerId, format = 'screenName', appearanceType: appearance_type = 'all', after = 0,
+        influencerId, format = this.defaultFormat, appearanceType: appearance_type = 'all', after = 0,
     } = {}) {
         if (!influencerId) throw new Error('influencerId not provided');
         if (!['screenName', 'id'].includes(format)) throw new Error('format not one of: screenName, id');
@@ -102,7 +104,7 @@ class HiveAPI {
         if (typeof (after) !== 'number') throw new Error('after should be type int');
         try {
             const response = await axios.get(
-                `https://hive.one/api/v1/influencers/${(format === 'screenName' ? 'screen_name' : 'id')}/${influencerId}/podcasts/`,
+                `${this.host}api/v1/influencers/${(format === 'screenName' ? 'screen_name' : 'id')}/${influencerId}/podcasts/`,
                 {
                     params: {
                         appearance_type,
@@ -125,7 +127,7 @@ class HiveAPI {
         if (![0, 1].includes(include_followers)) throw new Error('includeFollowers not one of: 0, 1');
         try {
             const response = await axios.get(
-                'https://hive.one/api/v1/influencers/batch/',
+                `${this.host}api/v1/influencers/batch/`,
                 {
                     params: {
                         twitter_ids: JSON.stringify(twitterIDS),
@@ -144,8 +146,8 @@ class HiveAPI {
     }
 }
 
-function createAPI(key) {
-    return new HiveAPI(key);
+function createAPI(settings) {
+    return new HiveAPI(settings);
 }
 
 export default createAPI;

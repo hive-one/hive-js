@@ -17,12 +17,12 @@ npm install --save hiveone-js
 Import into your project using the relevant method:
 ```
 const hive = require('hiveone-js').default;
-const api = hive('APIKEYHERE');
+const api = hive({ apiKey: 'APIKEYHERE' });
 ```
 
 ```
 import hive from 'hiveone-js';
-const api = hive('APIKEYHERE');
+const api = hive({ apiKey: 'APIKEYHERE' });
 ```
 
 ### [**List Available Influencers**](https://docs.hive.one/core-resources/available)
@@ -122,6 +122,21 @@ Argument | Required | Default | Options | Purpose
 `rankType` | No | `all` | `all`, `personal` | People are treated differently from other types of influencers (Companies, bots, etc.), if you request `all` an influencers rank/score will reflect their influence across our entire dataset, if you request `personal` their rank/score will reflect their infulencer across other people.
 `includeFollowers` | No | `0` | `0`, `1` | Allows you to get top followers for the requested influencer.
 
+
+## Changing Defaults
+You can change the defaults when initalising the library
+
+You can change the default infleuncerID format like so:
+```
+const hive = require('hiveone-js').default;
+const api = hive({ apiKey: 'APIKEYHERE', defaultFormat = 'id' });
+```
+
+You can also change the host the library connects to (Useful if you are caching hive.one data)
+```
+const hive = require('hiveone-js').default;
+const api = hive({ apiKey: 'APIKEYHERE', host = 'https://hosthere' });
+```
 
 
 ## Contributions

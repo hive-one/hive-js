@@ -4,12 +4,24 @@ dotenv.config();
 
 const hive = require('./dist/hive').default;
 
-const hiveAPI = hive(process.env.APIKEY);
+const hiveAPI = hive({ apiKey: process.env.APIKEY });
 
 // Two types of test, unit tests with mocking and integrations tests using live API
 
 test('API Key returns same API Key in env', () => {
     expect(hiveAPI.apiKey).toBe(process.env.APIKEY);
+});
+
+describe('Change Defaults', () => {
+    test('Change format', () => {
+        const testAPI = hive({ apiKey: process.env.APIKEY, defaultFormat: 'id' });
+        expect(testAPI.defaultFormat).toBe('id');
+    });
+
+    test('Change Host', () => {
+        const testAPI = hive({ apiKey: process.env.APIKEY, host: 'https://test.com' });
+        expect(testAPI.host).toBe('https://test.com');
+    });
 });
 
 describe('Integration Tests With Live API', () => {
