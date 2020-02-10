@@ -124,7 +124,7 @@ Argument | Required | Default | Options | Purpose
 
 
 ## Changing Defaults
-You can change the defaults when initalising the library
+You can change the defaults when initializing the library
 
 You can change the default infleuncerID format like so:
 ```
