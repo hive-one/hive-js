@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const axios = require('axios');
 
 class HiveAPI {
@@ -25,9 +26,21 @@ class HiveAPI {
         }
     }
 
-    async topInfluencers({ cluster = 'Crypto', after = 0 } = {}) {
+    async topInfluencers({
+        cluster = 'Crypto', after = 0, sort: sort_by = 'rank', order = 'asc',
+    } = {}) {
+        const sortMap = [
+            'followers',
+            'following',
+            'screen_name',
+            'change_week',
+            'score',
+            'rank',
+        ];
         if (!['Crypto', 'BTC', 'ETH', 'XRP'].includes(cluster)) throw new Error('cluster not one of: Crypto, BTC, ETH, XRP');
         if (typeof (after) !== 'number') throw new Error('After should be type int');
+        if (!sortMap.includes(sort_by)) throw new Error(`Sort: ${sort_by} is not supported`);
+        if (!['asc', 'desc'].includes(order)) throw new Error(`Order: ${order} is not supported`);
         try {
             const response = await axios.get(
                 `${this.host}api/v1/influencers/top/`,
@@ -35,6 +48,8 @@ class HiveAPI {
                     params: {
                         cluster,
                         after,
+                        sort_by,
+                        order,
                     },
                     headers: {
                         Authorization: `Token ${this.apiKey}`,

@@ -94,6 +94,13 @@ describe('Integration Tests With Live API', () => {
                 .rejects
                 .toThrow(Error);
         });
+
+        test('Change Sort', async () => {
+            const response = await hiveAPI.topInfluencers({ sort: 'change_week', order: 'desc' });
+            const firstRank = response[0].rank;
+            const secondRank = response[1].rank;
+            expect(secondRank).not.toBe(firstRank + 1);
+        });
     });
 
     describe('Influencer Details', () => {
