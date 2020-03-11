@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -50,6 +51,13 @@ describe('Integration Tests With Live API', () => {
                 .rejects
                 .toThrow(Error);
         });
+
+        test('Etag', async () => {
+            const response = await hiveAPI.availableInfluncers({ format: 'id' });
+            const etagResponse = await hiveAPI.availableInfluncers({ format: 'id', etag: response._etag });
+            expect(etagResponse).toBe(true);
+            expect(typeof (etagResponse)).toBe('boolean');
+        });
     });
 
     describe('Top Influencers', () => {
@@ -101,6 +109,13 @@ describe('Integration Tests With Live API', () => {
             const secondRank = response[1].rank;
             expect(secondRank).not.toBe(firstRank + 1);
         });
+
+        test('Etag', async () => {
+            const response = await hiveAPI.topInfluencers({ sort: 'change_week', order: 'desc' });
+            const etagResponse = await hiveAPI.topInfluencers({ sort: 'change_week', order: 'desc', etag: response._etag });
+            expect(etagResponse).toBe(true);
+            expect(typeof (etagResponse)).toBe('boolean');
+        });
     });
 
     describe('Influencer Details', () => {
@@ -147,6 +162,13 @@ describe('Integration Tests With Live API', () => {
                 .toThrow(Error);
         });
 
+        test('Etag', async () => {
+            const response = await hiveAPI.influencerDetails({ influencerId: 'aantonop', includeFollowers: 1 });
+            const etagResponse = await hiveAPI.influencerDetails({ influencerId: 'aantonop', includeFollowers: 1, etag: response._etag });
+            expect(etagResponse).toBe(true);
+            expect(typeof (etagResponse)).toBe('boolean');
+        });
+
         // TODO: Screen Name
         // TODO: ID
     });
@@ -159,36 +181,43 @@ describe('Integration Tests With Live API', () => {
         });
 
         test('Default Params', async () => {
-            const response = await hiveAPI.influencerPodcasts({ influencerId: 'aantonop' });
+            const response = await hiveAPI.influencerPodcasts({ influencerId: 'laurashin' });
             expect(typeof (response)).toBe('object');
-            expect(response.screenName).toBe('aantonop');
+            expect(response.screenName).toBe('laurashin');
             expect(Object.prototype.hasOwnProperty.call(response, 'podcasts')).toBe(true);
         });
 
         test('Appearance Type', async () => {
-            const response = await hiveAPI.influencerPodcasts({ influencerId: 'aantonop', appearanceType: 'guest' });
+            const response = await hiveAPI.influencerPodcasts({ influencerId: 'laurashin', appearanceType: 'guest' });
             expect(typeof (response)).toBe('object');
-            expect(response.screenName).toBe('aantonop');
+            expect(response.screenName).toBe('laurashin');
             expect(Object.prototype.hasOwnProperty.call(response, 'podcasts')).toBe(true);
         });
 
         test('After', async () => {
-            const response = await hiveAPI.influencerPodcasts({ influencerId: 'aantonop', after: 20 });
+            const response = await hiveAPI.influencerPodcasts({ influencerId: 'laurashin', after: 20 });
             expect(typeof (response)).toBe('object');
-            expect(response.screenName).toBe('aantonop');
+            expect(response.screenName).toBe('laurashin');
             expect(Object.prototype.hasOwnProperty.call(response, 'podcasts')).toBe(true);
         });
 
         test('Unsupported Appearance Type', async () => {
-            await expect(hiveAPI.influencerPodcasts({ influencerId: 'aantonop', appearanceType: 'audience' }))
+            await expect(hiveAPI.influencerPodcasts({ influencerId: 'laurashin', appearanceType: 'audience' }))
                 .rejects
                 .toThrow(Error);
         });
 
         test('Unsupported After Type', async () => {
-            await expect(hiveAPI.influencerPodcasts({ influencerId: 'aantonop', after: '20' }))
+            await expect(hiveAPI.influencerPodcasts({ influencerId: 'laurashin', after: '20' }))
                 .rejects
                 .toThrow(Error);
+        });
+
+        test('Etag', async () => {
+            const response = await hiveAPI.influencerPodcasts({ influencerId: 'laurashin', appearanceType: 'guest' });
+            const etagResponse = await hiveAPI.influencerPodcasts({ influencerId: 'laurashin', appearanceType: 'guest', etag: response._etag });
+            expect(etagResponse).toBe(true);
+            expect(typeof (etagResponse)).toBe('boolean');
         });
     });
 

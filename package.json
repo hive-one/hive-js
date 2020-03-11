@@ -7,7 +7,7 @@
     "dev": "NODE_ENV=development webpack",
     "build": "NODE_ENV=production webpack",
     "lint": "eslint",
-    "test": "npm run build && jest"
+    "test": "NODE_ENV=development npm run build && jest --env node"
   },
   "author": "Danny Aziz",
   "license": "MIT",
