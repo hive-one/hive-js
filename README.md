@@ -2,7 +2,7 @@
 
 # Hive JS
 
-
+**⚠️This is deprecated. See https://www.borgapi.com/ ⚠️**
 ## Install
 
 1. Sign up for an Account at [hive.one](https://hive.one/)
